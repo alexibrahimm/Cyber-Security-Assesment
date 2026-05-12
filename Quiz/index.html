@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cyber Security Professional Quiz</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Cyber Security MCQ Assessment</p>
+        <h1>Quiz</h1>
+        <p class="subtitle">Answer all 60 questions.</p>
+      </div>
+      <div class="score-card">
+        <span id="answeredCount">0</span><small>/ 60 answered</small>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Progress</span><span id="progressText">0%</span></div>
+        <div class="progress"><div id="progressBar"></div></div>
+      </div>
+      <button id="submitBtn" class="primary-btn">Submit Quiz</button>
+      <button id="resetBtn" class="secondary-btn" type="button">Reset</button>
+    </section>
+
+    <form id="quizForm" class="quiz"></form>
+
+    <section id="resultPanel" class="results hidden" aria-live="polite"></section>
+  </main>
+
+  <script>
+    const questions = [
+      {
+            "q": "What is Cyber Security mainly concerned with?",
+            "o": [
+                  "Designing websites",
+                  "Protecting online information and systems",
+                  "Increasing internet speed",
+                  "Creating software games"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Cyber Security is also called:",
+            "o": [
+                  "Web Technology",
+                  "Data Science",
+                  "Information Technology Security",
+                  "Cloud Programming"
+            ],
+            "a": 2
+      },
+      {
+            "q": "Which of the following is NOT protected by Cyber Security?",
+            "o": [
+                  "Networks",
+                  "Devices",
+                  "Programs",
+                  "Electricity bills"
+            ],
+            "a": 3
+      },
+      {
+            "q": "A virus is a program that:",
+            "o": [
+                  "Improves system speed",
+                  "Runs against the user's wishes",
+                  "Creates hardware",
+                  "Repairs damaged files automatically"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Which software helps protect a computer against viruses and worms?",
+            "o": [
+                  "Compiler",
+                  "Antivirus",
+                  "Media Player",
+                  "Spreadsheet"
+            ],
+            "a": 1
+      },
+      {
+            "q": "A hacker is a person who:",
+            "o": [
+                  "Repairs computers",
+                  "Gains unauthorized access to data",
+                  "Designs websites",
+                  "Creates databases"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Black Hat Hackers are:",
+            "o": [
+                  "Ethical hackers",
+                  "Legal testers",
+                  "Unethical hackers",
+                  "Government officers"
+            ],
+            "a": 2
+      },
+      {
+            "q": "White Hat Hackers are also called:",
+            "o": [
+                  "Virus creators",
+                  "Ethical hackers",
+                  "Criminal hackers",
+                  "Password crackers"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Grey Hat Hackers:",
+            "o": [
+                  "Always destroy systems",
+                  "Never hack systems",
+                  "Can hack systems without permission but usually do not damage them",
+                  "Only work for banks"
+            ],
+            "a": 2
+      },
+      {
+            "q": "Which of the following is used to prevent hacking?",
+            "o": [
+                  "Weak passwords",
+                  "Firewalls",
+                  "Ignoring updates",
+                  "Sharing passwords"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Malware stands for:",
+            "o": [
+                  "Managed software",
+                  "Malicious software",
+                  "Multiple software",
+                  "Manual software"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Trojan Horse mainly spreads through:",
+            "o": [
+                  "Printers",
+                  "Email viruses",
+                  "CPU chips",
+                  "Keyboards"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Password cracking attacks attempt to:",
+            "o": [
+                  "Improve passwords",
+                  "Find passwords",
+                  "Encrypt data",
+                  "Delete browsers"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Which is a good password practice?",
+            "o": [
+                  "Using same password everywhere",
+                  "Using short passwords",
+                  "Using strong unique passwords",
+                  "Sharing passwords with friends"
+            ],
+            "a": 2
+      },
+      {
+            "q": "Which layer protects storage and transfer of data?",
+            "o": [
+                  "Endpoint Security",
+                  "Data Security",
+                  "Human Layer",
+                  "Network Security"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Which layer protects the connection between devices and network?",
+            "o": [
+                  "Endpoint Security",
+                  "Perimeter Security",
+                  "Application Security",
+                  "Human Layer"
+            ],
+            "a": 0
+      },
+      {
+            "q": "Which layer is considered the weakest link in cyber security?",
+            "o": [
+                  "Data Layer",
+                  "Network Layer",
+                  "Human Layer",
+                  "Application Layer"
+            ],
+            "a": 2
+      },
+      {
+            "q": "Vulnerabilities are:",
+            "o": [
+                  "Security strengths",
+                  "Gaps or weaknesses in a system",
+                  "Backup files",
+                  "Hardware devices"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Which of the following is a vulnerability?",
+            "o": [
+                  "SQL Injection",
+                  "Encryption",
+                  "Firewall",
+                  "Backup power supply"
+            ],
+            "a": 0
+      },
+      {
+            "q": "Phishing attacks generally attempt to:",
+            "o": [
+                  "Increase bandwidth",
+                  "Steal sensitive information",
+                  "Improve browser performance",
+                  "Upgrade hardware"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Internet Governance involves:",
+            "o": [
+                  "Only governments",
+                  "Only private companies",
+                  "Shared roles among many stakeholders",
+                  "Only hackers"
+            ],
+            "a": 2
+      },
+      {
+            "q": "Which organization manages domain names and internet numbers?",
+            "o": [
+                  "ICANN",
+                  "NASA",
+                  "WHO",
+                  "UNESCO"
+            ],
+            "a": 0
+      },
+      {
+            "q": "Cyber criminals are also known as:",
+            "o": [
+                  "Designers",
+                  "Analysts",
+                  "Hackers",
+                  "Operators"
+            ],
+            "a": 2
+      },
+      {
+            "q": "Identity thieves mainly target:",
+            "o": [
+                  "Computer hardware",
+                  "Personal information",
+                  "Printers",
+                  "Cables"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Internet stalkers monitor:",
+            "o": [
+                  "TV channels",
+                  "Online activities",
+                  "Radio signals",
+                  "Electricity usage"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Cyber terrorism is usually:",
+            "o": [
+                  "Politically motivated",
+                  "Educational",
+                  "Harmless",
+                  "Entertainment-based"
+            ],
+            "a": 0
+      },
+      {
+            "q": "The CIA Triad stands for:",
+            "o": [
+                  "Confidentiality, Integrity, Availability",
+                  "Control, Inspection, Access",
+                  "Coding, Internet, Authentication",
+                  "Communication, Integrity, Access"
+            ],
+            "a": 0
+      },
+      {
+            "q": "Which CIA Triad component protects information from unauthorized access?",
+            "o": [
+                  "Integrity",
+                  "Confidentiality",
+                  "Availability",
+                  "Authentication"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Which of the following helps maintain confidentiality?",
+            "o": [
+                  "Data encryption",
+                  "File deletion",
+                  "Virus creation",
+                  "Formatting"
+            ],
+            "a": 0
+      },
+      {
+            "q": "Integrity ensures that data:",
+            "o": [
+                  "Is always public",
+                  "Cannot be modified improperly",
+                  "Is deleted quickly",
+                  "Is shared online"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Which measure helps guarantee integrity?",
+            "o": [
+                  "Cryptographic checksums",
+                  "Weak passwords",
+                  "Open Wi-Fi",
+                  "Spam emails"
+            ],
+            "a": 0
+      },
+      {
+            "q": "Availability ensures that:",
+            "o": [
+                  "Data is always hidden",
+                  "Data is accessible when needed",
+                  "Data is encrypted permanently",
+                  "Passwords are removed"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Which is a measure for availability?",
+            "o": [
+                  "Firewalls",
+                  "Backing up data",
+                  "Data redundancy",
+                  "All of the above"
+            ],
+            "a": 3
+      },
+      {
+            "q": "An asset in cyber security is:",
+            "o": [
+                  "A useless device",
+                  "Anything valuable to an organization",
+                  "A gaming application",
+                  "A random file"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Which is an example of an information asset?",
+            "o": [
+                  "Sensitive database",
+                  "Keyboard wire",
+                  "Mouse pad",
+                  "Fan"
+            ],
+            "a": 0
+      },
+      {
+            "q": "A threat is:",
+            "o": [
+                  "A protection method",
+                  "An incident that may harm an asset",
+                  "A software update",
+                  "A network cable"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Which motivation involves theft of intellectual property?",
+            "o": [
+                  "Political",
+                  "Economic",
+                  "Social",
+                  "Educational"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Web-based attacks occur on:",
+            "o": [
+                  "Hardware chips",
+                  "Websites and web applications",
+                  "Keyboards only",
+                  "Power systems"
+            ],
+            "a": 1
+      },
+      {
+            "q": "SQL Injection is a type of:",
+            "o": [
+                  "Injection attack",
+                  "Physical attack",
+                  "Hardware attack",
+                  "Backup attack"
+            ],
+            "a": 0
+      },
+      {
+            "q": "DNS Spoofing causes:",
+            "o": [
+                  "Correct IP addresses",
+                  "Wrong IP addresses to be returned",
+                  "Better internet speed",
+                  "Automatic encryption"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Session Hijacking involves stealing:",
+            "o": [
+                  "Hard disks",
+                  "Cookies/session IDs",
+                  "Keyboards",
+                  "USB drives"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Brute force attacks use:",
+            "o": [
+                  "Artificial intelligence only",
+                  "Trial and error guesses",
+                  "Hardware destruction",
+                  "Social media posts"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Denial of Service attacks aim to:",
+            "o": [
+                  "Improve server performance",
+                  "Make services unavailable",
+                  "Encrypt all data",
+                  "Create backups"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Dictionary attacks use:",
+            "o": [
+                  "Random images",
+                  "Commonly used passwords",
+                  "Audio signals",
+                  "Mobile towers"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Man-in-the-middle attacks allow attackers to:",
+            "o": [
+                  "Destroy hardware directly",
+                  "Intercept communication",
+                  "Upgrade servers",
+                  "Repair databases"
+            ],
+            "a": 1
+      },
+      {
+            "q": "A worm differs from a virus because it:",
+            "o": [
+                  "Cannot replicate",
+                  "Self-replicates and spreads",
+                  "Only affects printers",
+                  "Is harmless"
+            ],
+            "a": 1
+      },
+      {
+            "q": "A Trojan horse appears as:",
+            "o": [
+                  "Damaged software",
+                  "Legitimate software",
+                  "Network hardware",
+                  "Antivirus software"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Backdoors are used to:",
+            "o": [
+                  "Improve graphics",
+                  "Bypass authentication",
+                  "Increase bandwidth",
+                  "Reduce storage"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Bots are:",
+            "o": [
+                  "Manual network processes",
+                  "Automated processes",
+                  "Antivirus programs",
+                  "Backup files"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Which is an example of an active attack?",
+            "o": [
+                  "Eavesdropping",
+                  "Traffic analysis",
+                  "Message modification",
+                  "Monitoring only"
+            ],
+            "a": 2
+      },
+      {
+            "q": "Masquerade attacks involve:",
+            "o": [
+                  "Pretending to be another user",
+                  "Encrypting data",
+                  "Deleting software",
+                  "Backing up servers"
+            ],
+            "a": 0
+      },
+      {
+            "q": "Session replay attacks involve stealing:",
+            "o": [
+                  "IP cables",
+                  "Session information",
+                  "CPU memory",
+                  "Operating systems"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Passive attacks generally involve:",
+            "o": [
+                  "Data modification",
+                  "Listening and monitoring",
+                  "Server destruction",
+                  "Hardware theft"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Eavesdropping is also called:",
+            "o": [
+                  "Injection",
+                  "Tapping",
+                  "Flooding",
+                  "Mirroring"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Traffic analysis studies:",
+            "o": [
+                  "Vehicle traffic",
+                  "Metadata and communication patterns",
+                  "Printer usage",
+                  "CPU temperature"
+            ],
+            "a": 1
+      },
+      {
+            "q": "A logic bomb:",
+            "o": [
+                  "Replicates itself rapidly",
+                  "Activates when triggered",
+                  "Only spreads through emails",
+                  "Improves system security"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Which malware does NOT self-replicate?",
+            "o": [
+                  "Worm",
+                  "Virus",
+                  "Trojan Horse",
+                  "Both Trojan Horse and Logic Bomb"
+            ],
+            "a": 3
+      },
+      {
+            "q": "Which malware often attaches itself to executable files?",
+            "o": [
+                  "Virus",
+                  "Worm",
+                  "Firewall",
+                  "Router"
+            ],
+            "a": 0
+      },
+      {
+            "q": "Code Red is an example of:",
+            "o": [
+                  "Virus",
+                  "Worm",
+                  "Trojan Horse",
+                  "Logic Bomb"
+            ],
+            "a": 1
+      },
+      {
+            "q": "Back Orifice is an example of:",
+            "o": [
+                  "Worm",
+                  "Trojan Horse",
+                  "Firewall",
+                  "Virus"
+            ],
+            "a": 1
+      }
+];
+    const letters = ["a", "b", "c", "d"];
+    const quizForm = document.getElementById("quizForm");
+    const answeredCount = document.getElementById("answeredCount");
+    const progressText = document.getElementById("progressText");
+    const progressBar = document.getElementById("progressBar");
+    const resultPanel = document.getElementById("resultPanel");
+
+    function renderQuiz() {
+      quizForm.innerHTML = questions.map((item, index) => `
+        <article class="question-card" id="question-${index}">
+          <div class="question-head">
+            <span class="question-number">Question ${index + 1}</span>
+            <span class="status-dot" aria-label="Not answered"></span>
+          </div>
+          <h2>${item.q}</h2>
+          <div class="options">
+            ${item.o.map((option, optionIndex) => `
+              <label class="option">
+                <input type="radio" name="q${index}" value="${optionIndex}">
+                <span class="option-letter">${letters[optionIndex]}</span>
+                <span>${option}</span>
+              </label>
+            `).join("")}
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function getAnswers() {
+      return questions.map((_, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        return selected ? Number(selected.value) : null;
+      });
+    }
+
+    function updateProgress() {
+      const answers = getAnswers();
+      const answered = answers.filter(answer => answer !== null).length;
+      const percent = Math.round((answered / questions.length) * 100);
+      answeredCount.textContent = answered;
+      progressText.textContent = `${percent}%`;
+      progressBar.style.width = `${percent}%`;
+
+      questions.forEach((_, index) => {
+        const card = document.getElementById(`question-${index}`);
+        const dot = card.querySelector(".status-dot");
+        const isAnswered = answers[index] !== null;
+        card.classList.toggle("answered", isAnswered);
+        dot.setAttribute("aria-label", isAnswered ? "Answered" : "Not answered");
+      });
+    }
+
+    function gradeQuiz(event) {
+      event.preventDefault();
+      const answers = getAnswers();
+      let correct = 0;
+      const incorrect = [];
+
+      questions.forEach((item, index) => {
+        const userAnswer = answers[index];
+        if (userAnswer === item.a) {
+          correct++;
+        } else {
+          incorrect.push({
+            number: index + 1,
+            question: item.q,
+            selected: userAnswer,
+            correct: item.a,
+            correctText: item.o[item.a],
+            selectedText: userAnswer === null ? "Not answered" : item.o[userAnswer]
+          });
+        }
+      });
+
+      const score100 = ((correct / questions.length) * 100).toFixed(2);
+      const gradeClass = score100 >= 80 ? "excellent" : score100 >= 60 ? "good" : "needs-work";
+
+      resultPanel.className = `results ${gradeClass}`;
+      resultPanel.innerHTML = `
+        <div class="result-header">
+          <div>
+            <p class="eyebrow">Final Grade</p>
+            <h2>${correct}/60</h2>
+            <p class="big-score">${score100}/100</p>
+          </div>
+          <div class="result-badge">${incorrect.length === 0 ? "Perfect Score" : `${incorrect.length} incorrect`}</div>
+        </div>
+
+        <div class="summary-grid">
+          <div><strong>${correct}</strong><span>Correct</span></div>
+          <div><strong>${incorrect.length}</strong><span>Incorrect / Missing</span></div>
+          <div><strong>${score100}%</strong><span>Percentage</span></div>
+        </div>
+
+        <h3>Incorrect Answers Review</h3>
+        ${incorrect.length === 0 ? `<p class="perfect">Excellent work! You answered every question correctly.</p>` : `
+          <div class="incorrect-list">
+            ${incorrect.map(item => `
+              <article class="incorrect-card">
+                <h4>Question ${item.number}: ${item.question}</h4>
+                <p><strong>Your answer:</strong> ${item.selected === null ? "Not answered" : `${letters[item.selected]}) ${item.selectedText}`}</p>
+                <p><strong>Correct answer:</strong> ${letters[item.correct]}) ${item.correctText}</p>
+              </article>
+            `).join("")}
+          </div>
+        `}
+      `;
+
+      resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function resetQuiz() {
+      quizForm.reset();
+      resultPanel.className = "results hidden";
+      resultPanel.innerHTML = "";
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    renderQuiz();
+    quizForm.addEventListener("change", updateProgress);
+    quizForm.addEventListener("submit", gradeQuiz);
+    document.getElementById("submitBtn").addEventListener("click", () => quizForm.requestSubmit());
+    document.getElementById("resetBtn").addEventListener("click", resetQuiz);
+    updateProgress();
+  </script>
+</body>
+</html>
